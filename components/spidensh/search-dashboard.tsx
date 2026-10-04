@@ -17,7 +17,7 @@ export function SearchDashboard({ user }: { user: { name: string; email: string 
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [history, setHistory] = useState<string[]>(() => readHistory())
-  const [stats, setStats] = useState(() => engine.stats())
+  const [stats, setStats] = useState(() => engine.usage())
   const [barKey, setBarKey] = useState(0)
   const [barValue, setBarValue] = useState('')
   const requestId = useRef(0)
@@ -35,10 +35,11 @@ export function SearchDashboard({ user }: { user: { name: string; email: string 
 
     setLoading(true)
     try {
-      const res = await engine.search(query, { user: user.email })
+      const res = await engine.search(query)
       if (id !== requestId.current) return
       setResult({ query, ...res })
-      setStats(engine.stats())
+      setStats(engine.usage())
+      setTimeout(() => setStats(engine.usage()), 1500)
     } catch (err) {
       if (id !== requestId.current || (err instanceof DOMException && err.name === 'AbortError')) return
       setResult(null)
@@ -114,7 +115,7 @@ export function SearchDashboard({ user }: { user: { name: string; email: string 
             {...stats}
             onClear={() => {
               engine.clearCache()
-              setStats(engine.stats())
+              setStats(engine.usage())
             }}
           />
           <section aria-label="Recent searches" className="glass rounded-2xl p-4">

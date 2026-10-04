@@ -5,7 +5,7 @@ export type SearchResult = {
   answer: string
   source: string
   url?: string
-  cached: boolean
+  instant: boolean
   latencyMs: number
 }
 
@@ -25,11 +25,11 @@ export function ResultBox({ result, error }: { result: SearchResult | null; erro
         <h2 className="text-xs font-medium uppercase tracking-wider text-muted-foreground text-pretty">{result.query}</h2>
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[11px] ${
-            result.cached ? 'bg-accent/15 text-accent' : 'bg-primary/15 text-primary'
+            result.instant ? 'bg-accent/15 text-accent' : 'bg-primary/15 text-primary'
           }`}
         >
           <Zap className="size-3" aria-hidden="true" />
-          {result.cached ? 'instant' : `${Math.round(result.latencyMs)} ms`}
+          {result.instant ? 'instant' : `${Math.round(result.latencyMs)} ms`}
         </span>
       </header>
 
